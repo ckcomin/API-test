@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caroline-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caroline-api
+  template:
+    metadata:
+      labels:
+        app: caroline-api
+    spec:
+      containers: 
+        - name: caroline-api
+          image: gcr.io/cit-262-team1-ez/caroline-api:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              cpu: ".5"
+              memory: "500Mi"
+            requests:
+              cpu: ".25"
+              memory: "250Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            failureThreshold: 1
+            periodSeconds: 10
+            timeoutSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            failureThreshold: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+                
