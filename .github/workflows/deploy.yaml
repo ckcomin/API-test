@@ -16,7 +16,7 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    #Prototype changes go here
+    # Prototype changes go here:
     environment: development
     permissions:
       contents: 'read'
@@ -35,7 +35,7 @@ jobs:
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
     - run: |-
-        gcloud --quiet auth configure-docker
+        gcloud --quiet auth configure-docker us-docker.pkg.dev
 
     - uses: 'google-github-actions/auth@v1'
       with:
@@ -47,12 +47,13 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
 
     # Build the Docker image
     - name: Build
       run: |-
         docker build \
-          --tag "gcr.io/cit-262-team1-ez/caroline-api:latest" \
+          --tag "us-docker.pkg.dev/cit-262-team1-ez/caroline-api/api-tests:latest" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -60,7 +61,7 @@ jobs:
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/cit-262-team1-ez/caroline-api:latest"
+        docker push "us-docker.pkg.dev/cit-262-team1-ez/caroline-api/api-tests:latest"
 
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
