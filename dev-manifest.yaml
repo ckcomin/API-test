@@ -14,7 +14,7 @@ spec:
     spec:
       containers: 
         - name: caroline-api
-          image: gcr.io/cit-262-team1-ez/caroline-api:latest
+          image: us-docker.pkg.dev/cit-262-team1-ez/caroline-api/api-tests:latest
           ports:
             - containerPort: 3000
           resources:
